@@ -55,53 +55,69 @@
     <!-- Your HTML Layout go here -->
     <!------------------------------>
 
-    <!-- our own navbar goes here -->
-    <nav id="navbarPlaceholder"></nav>
-
-    <!-- the body of your page goes here -->
-    <div class="container-fluid bg-light text-dark p-5">
-        <div class="container bg-light p-5">
-            <h1 class="display-4">Good morning, <span id="name-goes-here">friend</span></h1>
-            <hr>
-            <p>Quote of the day: <span id="quote-goes-here"> </span></p>
-        </div>
+    <div class="container bg-secondary py-5">
+        <label for="appt">Choose a time duration:</label>
+        <br>
+        <!-- <input type="time" id="duration" required>
+        <input id="time" type="time" min='01:00' max= '03:00'> -->
+        <input type="number" id="duration" placeholder="Enter minutes">
+        <br>
+        <input type="button" value="START" class="btn-primary" onclick="startTimer()">
+        <br>
+        <p id="demo"></p>
     </div>
-
-
-    <div class="container py-5 bg-info">
-        <h1>These buttons take you to other tech-tip solutions</h1>
-        <a class="btn btn-secondary" type="button" href="timer.html"> Go to Timer</a>
-        <a class="btn btn-secondary" type="button" href="dropdown.html"> Go to Dropdown</a>
-        <a class="btn btn-secondary" type="button" href="..."> Go to ...</a>
-    </div>
-
-    <div class="container bg-light py-5">
-        <h1>Some popular hikes</h1>
-        <!-- Here is container for cards  -->
-        <div class="container">
-            <div id="hikes-go-here" class="row row-cols-auto">
-            </div>
-        </div>
-    </div>
-
-    <!-- our own footer goes here-->
-    <nav id="footerPlaceholder"></nav>
 
     <!---------------------------------------------->
     <!-- Your own JavaScript functions go here    -->
     <!---------------------------------------------->
     <script src="./scripts/firebaseAPI_TEAM99.js"></script>
     <script src="./scripts/skeleton.js"></script>
-    <script src="./scripts/main.js"></script>
 
-<script>
-    db.collection ("users").doc(user.uid).collection("expenses")
-    .add({
-        source: source, 
+    <script>
+        function startTimer() {
+            var duration = document.getElementById("duration").value;
+            console.log(duration);
+            countdown(duration);
+        }
 
+        function countdown(duration) {
+            console.log("in countdownn " + duration);
+            // Set the date we're counting down to
+            // var countDownDate = new Date("Jan 5, 2024 15:37:25").getTime();
 
-    })
-</script>
+            var newDate = new Date();
+            newDate.setTime(newDate.getTime() + duration * 60 * 1000);
+            var countDownDate = newDate.getTime();
+
+            // Update the count down every 1 second
+            var x = setInterval(function () {
+
+                // Get today's date and time
+                var now = new Date().getTime();
+
+                // Find the distance between now and the count down date
+                var distance = countDownDate - now;
+                console.log("dist is: " + distance);
+
+                // Time calculations for days, hours, minutes and seconds
+                var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                // Display the result in the element with id="demo"
+                document.getElementById("demo").innerHTML = days + "d " + hours + "h " +
+                    minutes + "m " + seconds + "s ";
+
+                // If the count down is finished, write some text
+                if (distance < 0) {
+                    clearInterval(x);
+                    document.getElementById("demo").innerHTML = "EXPIRED";
+                }
+            }, 1000);
+        }
+    </script>
+
 
 </body>
 

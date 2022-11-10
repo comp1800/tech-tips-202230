@@ -22,7 +22,7 @@ insertName(); //run the function
 function readQuote() {
     db.collection("quotes").doc("tuesday") //name of the collection and documents should matach excatly with what you have in Firestore
         .onSnapshot(tuesdayDoc => { //arrow notation
-            console.log("current document data: " + tuesdayDoc.data()); //.data() returns data object
+            //console.log("current document data: " + tuesdayDoc.data()); //.data() returns data object
             document.getElementById("quote-goes-here").innerHTML = tuesdayDoc.data().quote; //using javascript to display the data on the right place
 
             //Here are other ways to access key:value data fields
@@ -72,8 +72,11 @@ function writeHikes() {
 function displayCards(collection) {
     let cardTemplate = document.getElementById("hikeCardTemplate");
 
-    db.collection(collection).get()
+    db.collection(collection)
+        //.where("level", "==", "moderatejlj")
+        .get()
         .then(snap => {
+            console.log(snap.empty);
             //var i = 1;  //if you want to use commented out section
             snap.forEach(doc => { //iterate thru each doc
                 var title = doc.data().name;        // get value of the "name" key
@@ -99,3 +102,4 @@ function displayCards(collection) {
 }
 
 displayCards("hikes");
+

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Group 1 Project: Destination Alarm Clock: Leaflet Control Geocoder</title>
+
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no initial-scale=1, maximum-scale=1"
+    />
+
+    <!-- Bootstrap Library CSS CDN go here -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+      crossorigin="anonymous"
+    />
+
+
+    <!-- Boostrap Library JS CDN  go here -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+      crossorigin="anonymous"
+    ></script>
+    
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@latest/dist/leaflet.css" />
+    <link rel="stylesheet" href="../dist/Control.Geocoder.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.3/dist/leaflet.css" />
+
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css" />
+
+
+    <script src="demo-esbuild/Map.js"></script>
+    <script src="https://unpkg.com/leaflet@latest/dist/leaflet-src.js"></script>
+    <script src="https://unpkg.com/leaflet@1.3.3/dist/leaflet.js"></script>
+    <script src="../dist/Control.Geocoder.js"></script>
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    
+
+    
+    <style type="text/css">
+
+  
+      
+      body {
+        margin: 0;
+      }
+      #map {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+
+    <div class="search-scope">
+      <input type="range" min="100" max="1000" value="100" class="slider" id="myRange">
+      <p>Radius (meters) :
+        <span id="demo"></span>
+      </p>
+    </div>
+
+
+
+    
+    <!--JUMBOTRON-->
+    <div class="jumbotron jumbotron-fluid">
+      <div class="container">
+        <h1 class="display-4">Destination Alarm Clock</h1>
+        <p class="lead">Pick a location and set an alarm!</p>
+      </div>
+    </div>
+
+    <div class="click-to-map">
+      <h1>Click anywhere on the map to navigate</h1>
+    </div>
+
+    <div id="map"></div>
+
+
+
+   
+    
+    <script type="text/javascript">
+      var map = L.map('map').setView([0, 0], 2);
+
+      var geocoder = L.Control.Geocoder.nominatim();
+      if (typeof URLSearchParams !== 'undefined' && location.search) {
+        // parse /?geocoder=nominatim from URL
+        var params = new URLSearchParams(location.search);
+        var geocoderString = params.get('geocoder');
+        if (geocoderString && L.Control.Geocoder[geocoderString]) {
+          console.log('Using geocoder', geocoderString);
+          geocoder = L.Control.Geocoder[geocoderString]();
+        } else if (geocoderString) {
+          console.warn('Unsupported geocoder', geocoderString);
+        }
+      }
+
+      var control = L.Control.geocoder({
+        query: 'Enter Destination',
+        placeholder: 'Search here...',
+        geocoder: geocoder
+      }).addTo(map);
+      var marker2;
+      var circle2;
+
+      var marker2 = L.marker([49.246292, -123.116226]).addTo(map);
+
+      var circle2 = L.circle([49.246292, -123.116226], {
+      // var circle2 = L.circle([geocoder.coords.latitude, geocoder.coords.longitude], {
+       radius: 100,
+       color: 'red',
+       fillColor: '#f03',
+       fillOpacity: 0.5
+       }).addTo(map);
+
+       map.fitBounds(circle2.getBounds());
+
+
+       
+
+
+
+      var slider = document.getElementById("myRange");
+      var output = document.getElementById("demo");
+      output.innerHTML = slider.value;
+
+
+      slider.oninput = function() {
+      output.innerHTML = this.value;
+      circle2.setRadius(this.value); // Sets the radius of the circle to be the value of the slider
+}
+
+
+function clickCircle(e) {
+  var clickedCircle = e.target;
+}
+
+
+ // wdestination is at x1, y1
+ // current live location x2, y2
+
+ // while (!end)
+ // if ( dist(x1, ya, x2, y2) <= radius ), notify!
+ // move() // get new x2, y2
+ // if 
+ // have a while loops that does this every ~5 seconds
+
+
+
+// get distance between two points
+
+
+
+
+
+      setTimeout(function() {
+        control.setQuery('Search Destination');
+      }, 12000);
+
+
+      L.tileLayer('https://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
+      }).addTo(map);
+
+
+
+      // get user's live location
+      navigator.geolocation.watchPosition(success, error);
+
+      // to avoid duplication of marker and circle when user changes location
+      // must declare marker and circle outside of the function
+      // so that they are both in the global scope
+      let marker, circle;
+
+
+
+
+      function success(position) {
+          const lat = position.coords.latitude;
+          const lng = position.coords.longitude;
+          const accuracy = position.coords.accuracy;
+
+          // checks to see if a value already exists for a marker
+          // if marker alreay exists on the map
+          if (marker) {
+            map.removeLayer(marker);
+            map.removeLayer(circle);
+          }
+
+
+          marker = L.marker([lat, lng]).addTo(map);
+          circle = L.circle([lat, lng], { 
+            radius: accuracy,
+            color: 'red',
+            fillColor: '#f03',
+            fillOpacity: 0.5})
+            .addTo(map);
+         
+          map.fitBounds(circle.getBounds());
+      }
+
+      function error(err) {
+        if (err.code == 1) {
+          alert("Pease allow geolocation access");
+
+        } else {
+          alert("Cannot get current location");
+        }
+
+      }
+
+      
+      map.on('click', function(e) {
+        geocoder.reverse(e.latlng, map.options.crs.scale(map.getZoom()), function(results) {
+          var r = results[0];
+          if (r) {
+            if (marker) {
+              marker
+                .setLatLng(r.center)
+                .setPopupContent(r.html || r.name)
+                .openPopup();
+            } else {
+              marker = L.marker(r.center)
+                .bindPopup(r.name)
+                .addTo(map)
+                .openPopup();
+            }
+          }
+
+          
+        });
+
+        
+      });
+
+      
+
+    </script>
+  </body>
+</html>
