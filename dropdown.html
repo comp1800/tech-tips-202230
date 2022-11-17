@@ -56,7 +56,7 @@
     <!------------------------------>
 
     <!--Bootsrap dropdown menu-->
-    <div class="dropdown">
+    <!-- <div class="dropdown">
         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
             data-bs-toggle="dropdown" aria-expanded="false">
             Dropdown button
@@ -64,9 +64,23 @@
         <ul id="demolist" class="dropdown-menu" aria-labelledby="dropdownMenuButton1" id="test">
             <li><a class="dropdown-item" href="#">Action</a></li>
             <li><a class="dropdown-item" href="#">Another action</a></li>
-            <li><a class="dropdown-item" href="#">Something else here</a></li>
+            <li><a class="dropdown-item" href="#">Something else here</a></li> 
+        </ul>
+    </div> -->
+
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdown2" data-bs-toggle="dropdown"
+            aria-expanded="false">
+            Dropdown button
+        </button>
+        <ul id="list-goes-here" class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
         </ul>
     </div>
+
+    <!------------ template -->
+    <template id="dropdownItemTemplate">
+        <li><a class="dropdown-item" href="#">Item</a></li>
+    </template>
 
     <!---------------------------------------------->
     <!-- Your own JavaScript functions go here    -->
@@ -75,14 +89,67 @@
     <script src="./scripts/skeleton.js"></script>
 
     <script>
-        //For dropdown bootstrap to show the choice in the Button after selection
-        function dropdownListener() {
-            $('#demolist li').on('click', function () {
-                $('#dropdownMenuButton').text($(this).text());
-                console.log($(this).text());
-            });
+        function createData() {
+            // Add a new document with a generated id.
+            db.collection("cities").add({
+                    name: "Tokyo",
+                    country: "Japan"
+                })
+                .then((docRef) => {
+                    console.log("Document written with ID: ", docRef.id);
+                })
+                .catch((error) => {
+                    console.error("Error adding document: ", error);
+                });
+                db.collection("cities").add({
+                    name: "Paris",
+                    country: "France"
+                })
+                .then((docRef) => {
+                    console.log("Document written with ID: ", docRef.id);
+                })
+                .catch((error) => {
+                    console.error("Error adding document: ", error);
+                });
+                db.collection("cities").add({
+                    name: "Saigon",
+                    country: "Vietnam"
+                })
+                .then((docRef) => {
+                    console.log("Document written with ID: ", docRef.id);
+                })
+                .catch((error) => {
+                    console.error("Error adding document: ", error);
+                });
         }
-        dropdownListener();
+        //For dropdown bootstrap to show the choice in the Button after selection
+        // function createDropdown() {
+        //     db.collection("cities").get().then(function (snap) {
+        //         snap.forEach(function (doc) {
+        //             console.log(doc.data().name);
+        //             var name = doc.data().name;
+        //             let newitem = document.getElementById("dropdownItemTemplate")
+        //                                   .content.cloneNode(true)
+        //             newitem.querySelector("a").innerHTML = name;
+        //             document.getElementById("list-goes-here").appendChild(newitem);
+        //         })
+        //     })
+        // }
+        // createDropdown();
+
+        function createDropdown() {
+            db.collection("cities").get().then(function (snap) {
+                snap.forEach(function (doc) {
+                    console.log(doc.data().name);
+                    var name = doc.data().name;
+                    let newitem = document.createElement("a")
+                    newitem.querySelector("a").innerHTML = name;
+                    document.getElementById("list-goes-here").appendChild(newitem);
+                })
+            })
+        }
+        createDropdown();
+ 
     </script>
 
 </body>

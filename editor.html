@@ -48,8 +48,7 @@
                 <h5 class="card-title">Card title</h5>
                 <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
                     card's content.</p>
-                <a href="eachHike.html" class="btn btn-primary card-href read-more">Read more</a>
-                <i class="material-icons">bookmark_border</i>
+                <a class="btn btn-primary card-href">Get Details</a>
             </div>
         </div>
     </template>
@@ -59,7 +58,6 @@
 
     <!-- our own navbar goes here -->
     <nav id="navbarPlaceholder"></nav>
-    <div id="sidebarPlaceholder"> </div>
 
     <!-- the body of your page goes here -->
     <div class="container-fluid bg-light text-dark p-5">
@@ -75,10 +73,6 @@
         <h1>These buttons take you to other tech-tip solutions</h1>
         <a class="btn btn-secondary" type="button" href="timer.html"> Go to Timer</a>
         <a class="btn btn-secondary" type="button" href="dropdown.html"> Go to Dropdown</a>
-        <a class="btn btn-secondary" type="button" href="transaction.html"> Go to Transaction</a>
-        <a class="btn btn-secondary" type="button" href="submission.html"> Go to File Submission</a>
-        <a class="btn btn-secondary" type="button" href="profile.html"> Go to Profile</a>
-
         <a class="btn btn-secondary" type="button" href="..."> Go to ...</a>
     </div>
 
@@ -102,7 +96,12 @@
     <script src="./scripts/main.js"></script>
 
 <script>
+    db.collection ("users").doc(user.uid).collection("expenses")
+    .add({
+        source: source, 
 
+
+    })
 </script>
 
 </body>

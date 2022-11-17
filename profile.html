@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -27,6 +26,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/ui/4.8.1/firebase-ui-auth.js"></script>
     <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/4.8.1/firebase-ui-auth.css" />
@@ -34,61 +34,52 @@
     <!-------------------------------------------->
     <!-- Other libraries and styles of your own -->
     <!-------------------------------------------->
-    <!-- <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> -->
-    <!-- <link rel="stylesheet" href="./styles/style.css"> -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="./styles/styles.css">
 
 </head>
 
 <body>
-    <!-- Templates for general use, not displayed -->
-    <template id="hikeCardTemplate">
-        <div class="card py-2 mx-2" style="width: 18rem;">
-            <img class="card-image card-img-top" src=" ..." alt="...">
-            <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                    card's content.</p>
-                <a href="eachHike.html" class="btn btn-primary card-href read-more">Read more</a>
-                <i class="material-icons">bookmark_border</i>
-            </div>
-        </div>
-    </template>
     <!------------------------------>
     <!-- Your HTML Layout go here -->
     <!------------------------------>
 
     <!-- our own navbar goes here -->
     <nav id="navbarPlaceholder"></nav>
-    <div id="sidebarPlaceholder"> </div>
+
+    <!-- <img src="https://firebasestorage.googleapis.com/v0/b/comp1800-202230-72742.appspot.com/o/images%2FcxpgGxcytBaC0zfbRMJ7tcztto02.jpg?alt=media&amp;token=555b40d0-0bf5-4bf6-bf84-75a3f26f07fb"> -->
+
 
     <!-- the body of your page goes here -->
-    <div class="container-fluid bg-light text-dark p-5">
-        <div class="container bg-light p-5">
-            <h1 class="display-4">Good morning, <span id="name-goes-here">friend</span></h1>
-            <hr>
-            <p>Quote of the day: <span id="quote-goes-here"> </span></p>
-        </div>
-    </div>
-
-
-    <div class="container py-5 bg-info">
-        <h1>These buttons take you to other tech-tip solutions</h1>
-        <a class="btn btn-secondary" type="button" href="timer.html"> Go to Timer</a>
-        <a class="btn btn-secondary" type="button" href="dropdown.html"> Go to Dropdown</a>
-        <a class="btn btn-secondary" type="button" href="transaction.html"> Go to Transaction</a>
-        <a class="btn btn-secondary" type="button" href="submission.html"> Go to File Submission</a>
-        <a class="btn btn-secondary" type="button" href="profile.html"> Go to Profile</a>
-
-        <a class="btn btn-secondary" type="button" href="..."> Go to ...</a>
-    </div>
-
-    <div class="container bg-light py-5">
-        <h1>Some popular hikes</h1>
-        <!-- Here is container for cards  -->
-        <div class="container">
-            <div id="hikes-go-here" class="row row-cols-auto">
+    <div class="container">
+        <h1>User Profile </h1>
+        <form>
+            <fieldset class="mb-3" id="personalInfoFields" disabled>
+                <div class="form-group py-5">
+                    <div id="profile-container">
+                        <img id="mypic-goes-here" src="" />
+                    </div>
+                    <input id="mypic-input" type="file">
+                </div>
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" id="nameInput" class="form-control" placeholder="Enter your name">
+                </div>
+                <div class="form-group">
+                    <label>School</label>
+                    <input type="text" id="schoolInput" class="form-control" placeholder="Enter your school">
+                </div>
+                <div class="form-group">
+                    <label>City</label>
+                    <input type="text" id="cityInput" class="form-control" placeholder="Enter your city">
+                </div>
+            </fieldset>
+            <div class="d-flex justify-content-end mt-5">
+                <button type="button" class="btn btn-secondary" onclick="editUserInfo()">Edit</button>
+                <span style="width: 10px"></span>
+                <button type="button" class="btn btn-info" onclick="saveUserInfo()">Save</button>
             </div>
-        </div>
+        </form>
     </div>
 
     <!-- our own footer goes here-->
@@ -99,11 +90,7 @@
     <!---------------------------------------------->
     <script src="./scripts/firebaseAPI_TEAM99.js"></script>
     <script src="./scripts/skeleton.js"></script>
-    <script src="./scripts/main.js"></script>
-
-<script>
-
-</script>
+    <script src="./scripts/profile.js"></script>
 
 </body>
 
