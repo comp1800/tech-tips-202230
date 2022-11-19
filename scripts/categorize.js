@@ -1,4 +1,4 @@
-var currentUser;        //put this right after you start script tag before writing any functions.
+var currentUser; //put this right after you start script tag before writing any functions.
 
 function populateInfo() {
     firebase.auth().onAuthStateChanged(user => {
@@ -38,8 +38,8 @@ function saveHabit() {
     $("#addedhabits").text(userAddedhabits);
 
     currentUser.update({
-        manualhabits: userAddedhabits
-    })
+            manualhabits: userAddedhabits
+        })
         .then(() => {
             console.log("Document successfully updated!");
         })
@@ -75,7 +75,9 @@ function checkboxListen() {
                     phoneaddiction: phoneaddiction,
                     gameaddiction: gameaddiction,
                     gamblingaddiction: gamblingaddiction
-                }, { merge: true })
+                }, {
+                    merge: true
+                })
             } else {
                 // No user is signed in.
             }
@@ -85,8 +87,8 @@ function checkboxListen() {
 checkboxListen();
 
 
-function enterHabit() {
-    console.log("inside write habit")
+function saveHabit() {
+    console.log("inside write habit");
     var poortime = document.getElementById("poor-time").value;
     var lacksleep = document.getElementById("lack-sleep").value;
     var lackexercise = document.getElementById("lack-sleep").value;
@@ -102,15 +104,19 @@ function enterHabit() {
     firebase.auth().onAuthStateChanged(user => {
         if (user) {
             var currentUser = db.collection("users").doc(user.uid)
-            var userID = user.uid;
-            currentUser.get()
-                .then(userDoc => {
-                    var userEmail = userDoc.data().email;
-                    db.collection("users").add({
-                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                    }).then(() => {
-                        window.location.href = "viewhabits.html"; //new line added
-                    })
+                .update({
+                    time: poortime,
+                    sleep: lacksleep,
+                    exercise: lackexercise,
+                    water: lackwater,
+                    posture: lackposture,
+                    phone: phoneaddiction,
+                    game: gameaddiction,
+                    gamble: gamblingaddiction,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+
+                }).then(() => {
+                    window.location.href = "viewhabits.html"; //new line added
                 })
 
         } else {
@@ -119,4 +125,3 @@ function enterHabit() {
     });
 
 }
-

@@ -27,7 +27,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/ui/4.8.1/firebase-ui-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/ui/4.8.1/firebase-ui-auth.js"></script> 
     <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/4.8.1/firebase-ui-auth.css" />
 
     <!-------------------------------------------->
@@ -39,63 +39,25 @@
 </head>
 
 <body>
-    <!-- Templates for general use, not displayed -->
-    <template id="hikeCardTemplate">
-        <div class="card py-2 mx-2" style="width: 18rem;">
-            <img class="card-image card-img-top" src=" ..." alt="...">
-            <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                    card's content.</p>
-                <a class="btn btn-primary card-href">Get Details</a>
-            </div>
-        </div>
-    </template>
     <!------------------------------>
     <!-- Your HTML Layout go here -->
     <!------------------------------>
 
-    <div class="container">
-        <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="notifications" checked="">
-            <label class="form-check-label" for="flexSwitchCheckChecked">Notifications</label>
-        </div>
-        <button type="button" class="btn btn-info" onclick="saveNotifications()">Save</button>
-    </div>
+    <!-- our own navbar goes here -->
+    <nav id="navbarPlaceholder"></nav>
+
+    <!-- the body of your page goes here -->
+    <!-- stuff -->
+
+    <!-- our own footer goes here-->
+    <nav id="footerPlaceholder"></nav>
 
     <!---------------------------------------------->
     <!-- Your own JavaScript functions go here    -->
     <!---------------------------------------------->
     <script src="./scripts/firebaseAPI_TEAM99.js"></script>
     <script src="./scripts/skeleton.js"></script>
-
-    <script>
-        function saveNotifications() {
-            firebase.auth().onAuthStateChanged(user => {
-                console.log("in save function");
-                const js = document.querySelector('#notifications');
-                console.log(js.checked);
-                db.collection("users").doc(user.uid).update({
-                    notifications: js.checked
-                })
-            })
-        }
-
-        function showSettings() {
-            firebase.auth().onAuthStateChanged(user => {
-                    db.collection("users").doc(user.uid)
-                        .get()
-                        .then(function (doc) {
-                            nstatus = doc.data().notifications;
-                            console.log("notfications is: " + nstatus);
-                            document.getElementById("notifications").checked = nstatus;
-
-                        })
-            })
-        }
-        showSettings();
-    </script>
-
+    <script src="./scripts/favourites.js"></script>
 
 </body>
 

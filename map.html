@@ -25,14 +25,25 @@
   <script src="https://unpkg.com/leaflet@1.9.2/dist/leaflet.js"
     integrity="sha256-o9N1jGDZrf5tS+Ft4gbIK7mYMipq9lqpVJ91xHSyKhg=" crossorigin=""></script>
 
+  <!-- "Geocoder-Control" is a free geocoder for leaflet -->
+  <!-- <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+  <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script> -->
+
+  <!-- Geoapify -->
+  <link rel="stylesheet"
+    href="https://unpkg.com/@geoapify/leaflet-address-search-plugin@^1/dist/L.Control.GeoapifyAddressSearch.min.css" />
+  <script
+    src="https://unpkg.com/@geoapify/leaflet-address-search-plugin@^1/dist/L.Control.GeoapifyAddressSearch.min.js">
+  </script>
+
   <style type="text/css">
     body {
       margin: 0;
     }
 
     #map {
-      width: 700px;
-      height: 700px;
+      width: 500px;
+      height: 500px;
     }
   </style>
 </head>
@@ -42,7 +53,7 @@
   <!--JUMBOTRON-->
   <div class="jumbotron jumbotron-fluid">
     <div class="container">
-      <h1 class="display-4">Destination Alarm Clock</h1>
+      <h1 class="display-4">Destination Alarm Clock (Carly's Try)</h1>
       <p class="lead">Pick a location and set an alarm!</p>
       <div class="search-scope">
         <input type="range" min="100" max="1000" value="500" class="slider" id="myRange">
@@ -58,32 +69,42 @@
       <h1>Click anywhere on the map to navigate</h1>
     </div>
     <div id="message"></div>
-    <div id="map"></div>
+    <div class="container jumbotron-fluid">
+      <div id="map"></div>
+    </div>
   </div>
 
   <!--SCRIPT -->
   <script type="text/javascript">
-    //----------------------------
-    // Get radius from the slider
-    //----------------------------
-    var myradius = document.getElementById("myRange").value;
-    document.getElementById("myRange").addEventListener("click", function () {
-      myradius = document.getElementById("myRange").value;
-      console.log(myradius);
-      document.getElementById("radius-goes-here").innerHTML = myradius;
-    })
-
     //--------------------------------------
     // MAP:  get current geolocation
     //---------------------------------------
     navigator.geolocation.getCurrentPosition(onSuccess, onError);
     var map; //for the map to be displayed
-    var marker; //for current location
-    var circle; //for destination location
+    var marker1; //for current location
+    var circle1; //for current circle(?)
+    var marker2; //for destination location
+    var circle2; //for destination circle
+    var location1;
+    var location2;
+    var myradius; //for how big circle is
 
-    //------------------------
-    // handle success case
-    //------------------------
+    //----------------------------
+    // Get radius from the slider
+    //----------------------------
+    function getRadius() {
+      myradius = document.getElementById("myRange").value;
+      document.getElementById("myRange").addEventListener("click", function () {
+        myradius = document.getElementById("myRange").value;
+        console.log(myradius);
+        document.getElementById("radius-goes-here").innerHTML = myradius;
+      })
+    }
+    getRadius();
+
+    //-----------------------------------------
+    // handle success case of getCurrentPosition
+    //-----------------------------------------
     function onSuccess(position) { //callback function
       const {
         latitude,
@@ -97,24 +118,22 @@
       //set a marker at the current location
       map = L.map('map').setView([latitude, longitude], 13);
       marker = L.marker([latitude, longitude]).addTo(map);
-      // map = L.map('map').setView([49.251793, -123.017628], 13);
-      // marker = L.marker([49.251793, -123.017628]).addTo(map);
 
-      //put overlay on the map, give credit wher credit is due
-      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-      }).addTo(map);
+      //addMapClickListener();
+      addGeocoder();
+    }
 
-      //create a popup when a location is clicked
-      //create a circle marker when a location is clicked
+    function addMapClickListener() {
       var popup = L.popup();
       var location = new L.circle();
-
       //Create listener, and event handler for a click
       //"e" is the clicked location
       map.on('click', onMapClick);
+      //Define the event hander below
       function onMapClick(e) {
+        //create a popup when a location is clicked
+        //create a circle marker when a location is clicked
+
         //assign content to popup message
         popup
           .setLatLng(e.latlng)
@@ -133,7 +152,67 @@
       }
     }
 
-    // handle error case
+    //-------------------------------------------
+    // Add the Geocoder 
+    //-------------------------------------------
+    function addGeocoder() {
+      var myAPIKey = "afee0b090ae44bfdb1bbf7bd1d439bc0"; // Get an API Key on https://myprojects.geoapify.com
+      var mapURL = L.Browser.retina ?
+        `https://maps.geoapify.com/v1/tile/{mapStyle}/{z}/{x}/{y}.png?apiKey={apiKey}` :
+        `https://maps.geoapify.com/v1/tile/{mapStyle}/{z}/{x}/{y}@2x.png?apiKey={apiKey}`;
+
+      // Add map tiles layer. Set 20 as the maximal zoom and provide map data attribution.
+      L.tileLayer(mapURL, {
+        attribution: 'Powered by Geoapify | © OpenMapTiles © OpenStreetMap contributors',
+        apiKey: myAPIKey,
+        mapStyle: "osm-bright-smooth", // More map styles on https://apidocs.geoapify.com/docs/maps/map-tiles/
+        maxZoom: 20
+      }).addTo(map);
+
+      // Add Geoapify Address Search control
+      const addressSearchControl = L.control.addressSearch(myAPIKey, {
+        position: 'topright',
+        resultCallback: (selectedAddress) => {
+          console.log(selectedAddress);
+          showSearchResult(selectedAddress);
+        },
+        suggestionsCallback: (suggestions) => {
+          console.log(suggestions);
+        }
+      });
+      map.addControl(addressSearchControl);
+      L.control.zoom({
+        position: 'bottomright'
+      }).addTo(map);
+    }
+
+    //----------------------------------------------------------------
+    //This function is called by addGeocoder after there is a result
+    //----------------------------------------------------------------
+    function showSearchResult(searchResult) {
+      newlatlng = L.latLng(searchResult.lat, searchResult.lon);
+      map.setView(newlatlng, 11);
+      L.marker(newlatlng).addTo(map);
+      var popup = L.popup();
+      var location = new L.circle();
+      //assign content to popup message
+      popup
+        .setLatLng(newlatlng)
+        .setContent("Your searched location is:  " + newlatlng.toString())
+        .openOn(map);
+      //remove old layers with circlemarker
+      //create new circle around clicked location "e"
+      //add it to the  map
+      map.removeLayer(location);
+      console.log(myradius);
+      location = new L.circle(newlatlng, {
+        fillColor: '#f03',
+        radius: myradius,
+      });
+      map.addLayer(location);
+    }
+
+    // handle error case for finding current position
     function onError() {
       message.classList.add('error');
       message.textContent = `Failed to get your location!`;

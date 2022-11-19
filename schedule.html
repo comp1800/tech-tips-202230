@@ -47,39 +47,10 @@
     <!-- our own navbar goes here -->
     <nav id="navbarPlaceholder"></nav>
 
-    <!-- <img src="https://firebasestorage.googleapis.com/v0/b/comp1800-202230-72742.appspot.com/o/images%2FcxpgGxcytBaC0zfbRMJ7tcztto02.jpg?alt=media&amp;token=555b40d0-0bf5-4bf6-bf84-75a3f26f07fb"> -->
-
-
     <!-- the body of your page goes here -->
     <div class="container">
-        <h1>User Profile </h1>
-        <form>
-            <fieldset class="mb-3" id="personalInfoFields" disabled>
-                <div class="form-group py-5">
-                    <div id="profile-container">
-                        <img id="mypic-goes-here" src="" />
-                    </div>
-                    <input id="mypic-input" type="file">
-                </div>
-                <div class="form-group">
-                    <label>Name</label>
-                    <input type="text" id="nameInput" class="form-control" placeholder="Enter your name">
-                </div>
-                <div class="form-group">
-                    <label>School</label>
-                    <input type="text" id="schoolInput" class="form-control" placeholder="Enter your school">
-                </div>
-                <div class="form-group">
-                    <label>City</label>
-                    <input type="text" id="cityInput" class="form-control" placeholder="Enter your city">
-                </div>
-            </fieldset>
-            <div class="d-flex justify-content-end mt-5">
-                <button type="button" class="btn btn-secondary" onclick="editUserInfo()">Edit</button>
-                <span style="width: 10px"></span>
-                <button type="button" class="btn btn-info" onclick="saveUserInfo()">Save</button>
-            </div>
-        </form>
+        <h1>User Schedule </h1>
+        <h1 id="result"></h1>
     </div>
 
     <!-- our own footer goes here-->
@@ -90,7 +61,7 @@
     <!---------------------------------------------->
     <script src="./scripts/firebaseAPI_TEAM99.js"></script>
     <script src="./scripts/skeleton.js"></script>
-    <script src="./scripts/profile.js"></script>
+    <script src="./scripts/schedule.js"></script>
 
 </body>
 
